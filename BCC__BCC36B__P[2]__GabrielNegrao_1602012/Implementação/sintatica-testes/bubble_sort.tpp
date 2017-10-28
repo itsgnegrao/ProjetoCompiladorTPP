@@ -10,7 +10,7 @@ preencheVetor()
   i := 0
   j := tam
   repita
-    vet[i] = j
+    vet[i] := j
     i := i + 1
     j := j - 1
   até i < tam

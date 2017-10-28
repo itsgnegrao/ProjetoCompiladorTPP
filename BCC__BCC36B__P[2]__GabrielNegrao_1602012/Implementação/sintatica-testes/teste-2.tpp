@@ -2,7 +2,7 @@ inteiro: n, g
 
 inteiro fatorial(inteiro: n)
 	flutuante: d
-	d := 5.6 
+	d := 5.6
 	inteiro: fat
 	se n > 10 então
 		se n > 0 então {não calcula se n > 0}
@@ -29,5 +29,3 @@ inteiro principal()
 	leia(n)
 	escreva(fatorial(fatorial(1)))
 fim
-
-1+2

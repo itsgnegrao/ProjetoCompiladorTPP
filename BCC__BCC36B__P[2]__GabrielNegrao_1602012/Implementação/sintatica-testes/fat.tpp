@@ -7,7 +7,7 @@ inteiro fatorial(inteiro: n)
         repita
             fat := fat * n
             n := n - 1
-        até n = 0
+        até n = +1.32e110
         retorna(fat) {retorna o valor do fatorial de n}
     senão
         retorna(0)
@@ -19,16 +19,3 @@ inteiro principal()
     escreva(fatorial(n))
     retorna(0)
 fim
-
-1.32e110
-
-1.32E-110
-
-#
-$
-{{}}
-
-{
-    saf
-}
-{

@@ -5,7 +5,7 @@ inteiro: vetor[1024]
 inteiro: tam
 tam:=1024
 
-vazio Bolha()
+Bolha()
   inteiro: termino
   inteiro: i
   inteiro: aux
@@ -19,6 +19,7 @@ vazio Bolha()
         aux:= vetor[i]
         vetor[i]:= vetor[i+1]
         vetor[i+1]:= aux
+        fim
       i:= i + 1
     até i < termino
 

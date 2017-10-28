@@ -1,13 +1,13 @@
-inteiro: T 
+inteiro: T
 T:= 4
 
 inteiro: V1[T]
 
 inteiro somavet(inteiro: vet[], inteiro: tam)
-	inteiro: result 
+	inteiro: result
 	result := 0
 
-	inteiro: i 
+	inteiro: i
 	i := 0
 
 	repita
@@ -15,7 +15,7 @@ inteiro somavet(inteiro: vet[], inteiro: tam)
 		i := i + 1
 	até i = tam - 1
 
-	retorna(result)	
+	retorna(result)
 fim
 
 inteiro principal ()

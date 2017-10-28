@@ -2,17 +2,17 @@
 inteiro: A[20]
 
 inteiro busca(inteiro: n)
-	
+
 	inteiro: retorno
 	inteiro: i
 
 	retorno := 0
 	i := 0
 
-	repita 
-		se A[i] = n
+	repita
+		se A[i] = n então
 			retorno := 1
-		fim		
+		fim
 		i := i + 1
 	até i = 20
 
@@ -25,7 +25,7 @@ inteiro principal()
 
 	i := 0
 
-	repita 
+	repita
 		A[i] := i
 		i := i + 1
 	até i = 20
