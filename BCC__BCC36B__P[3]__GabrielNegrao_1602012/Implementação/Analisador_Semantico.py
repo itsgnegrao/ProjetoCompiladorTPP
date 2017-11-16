@@ -14,9 +14,10 @@ import os
 
 class Analisador_Semantico:
 
-    def __init__(self, code):
+    def __init__(self, code, flag):
         self.tabSimbolos = {}
         self.escopo="global"
+        self.debug = flag
 
         self.arvoreSintatica = Analisador_Sintatico(code).ast
         self.programa(self.arvoreSintatica)
@@ -66,15 +67,18 @@ class Analisador_Semantico:
 
             if (son  in self.tabSimbolos.keys()):
                 print("Erro: Já existe uma função declarada como '"+node.value+"'")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
             if("global-"+son  in self.tabSimbolos.keys()):
                 print("Erro: Variável '"+son+ "' já declarada.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
             if (self.escopo+"-"+son  in self.tabSimbolos.keys()):
                 print("Erro: Variável '"+son+ "' já declarada.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
             self.tabSimbolos[self.escopo+"-"+son]=["variavel",son,False,False,tipo+complemento,0]
 
@@ -106,10 +110,12 @@ class Analisador_Semantico:
 
             if ("global-"+node.child[0].value in self.tabSimbolos.keys()):
                 print ("Erro: Já existe uma variável declarada com o nome de -> '"+node.child[0].value+"'.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
             elif (node.child[0].value in self.tabSimbolos.keys()):
                 print ("Erro: Função "+node.child[0].value+" já declarada.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
             self.tabSimbolos[node.child[0].value]=["funcao",node.child[0].value,[],False,tipo,0]
             self.cabecalho(node.child[0])
@@ -124,7 +130,8 @@ class Analisador_Semantico:
             return node.type
         else:
             print("Erro: Tipo inválido, tipo esperado -> 'inteiro' ou 'flutuante', tipo recebido -> '"+node.child.type+"'.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
     def cabecalho(self,node):
         listaParams = self.listaParametros(node.child[0])
@@ -138,7 +145,8 @@ class Analisador_Semantico:
                 print("Warning: A função '"+node.value+"' deveria retornar -> '"+tipoFunc+"' mas retorna -> '"+tipoCorpo+"'.")
             else:
                 print("Erro: A função '"+node.value+"' deveria retornar -> '"+tipoFunc+"' mas retorna -> '"+tipoCorpo+"'.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
 
     def listaParametros(self, node):
@@ -199,7 +207,8 @@ class Analisador_Semantico:
         if (self.escopo+"-"+node.value not in self.tabSimbolos.keys()):
             if ("global-"+node.value not in self.tabSimbolos.keys()):
                 print("Erro: Variável -> '"+node.value+"' lida no escopo -> '"+self.escopo+"' não declarada.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
         return "void"
 
@@ -208,7 +217,8 @@ class Analisador_Semantico:
 
         if (tipoExp == "logico"):
             print("Erro: Expressão escreva inválida em -> '"+self.escopo+"'.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         return "void"
 
@@ -218,7 +228,8 @@ class Analisador_Semantico:
 
         if (tipoExp == "logico"):
             print("Erro: Expressão de retorno inválida em -> '"+self.escopo+"'.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         return tipoExp
 
@@ -303,11 +314,13 @@ class Analisador_Semantico:
 
             if (name not in self.tabSimbolos):
                 print("Erro: Variável '"+node.value+"' chamada em '"+self.escopo+"' não foi declarada.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
         if (self.tabSimbolos[name][3] == False):
             print("Erro: Variável '"+name+"' chamada em '"+self.escopo+"' não foi atribuida.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         self.tabSimbolos[name][2] = True
         return self.tabSimbolos[name][4]
@@ -320,7 +333,8 @@ class Analisador_Semantico:
 
             if ("global"+"-"+node.child[0].value not in self.tabSimbolos.keys()):
                 print ("Erro: Variavel '"+node.child[0].value+"' não declarada.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
         tipoVar  = self.tabSimbolos[nome][4]
         tipoExp =  self.expressao(node.child[1])
@@ -333,13 +347,15 @@ class Analisador_Semantico:
         #acha o indice
         if (len(node.child[0].child) != 0):
             if(node.child[0].child[0].type == "indice"):
-                self.indice(node.child[0].child[0]) #valida o tipo do indice
-                tipoVar = tipoVar.replace("[]","")
+                tipoPosAcessada = self.indice(node.child[0].child[0]) #valida o tipo do indice
+                qtdeAcessada = (len(tipoPosAcessada))
+                tipoVar = tipoVar[:-qtdeAcessada]
 
         if (len(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child) != 0):
             if (node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0].type == "indice"):
-                self.indice(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0]) #valida o tipo do indice
-                tipoExp = tipoExp.replace("[]","")
+                tipoPosAcessada = self.indice(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0]) #valida o tipo do indice
+                qtdeAcessada = (len(tipoPosAcessada))
+                tipoExp = tipoExp[:-qtdeAcessada]
 
         if (tipoVar != tipoExp):
             print ("Warning: Coerção de tipos, tipo esperado -> '"+tipoVar+"', tipo recebido -> '"+tipoExp+"'.")
@@ -349,21 +365,23 @@ class Analisador_Semantico:
     def chamadaFuncao(self, node):
         if (node.value=="principal"and self.escopo!="principal"):
             print("Erro: Chamada para a função -> 'principal' da função -> '"+self.escopo+"'.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         if node.value not in self.tabSimbolos.keys():
             print ("Erro: Função -> '"+node.value+"' não declarada.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         if (node.value == "principal" and self.escopo=="principal"):
             print("Warning: Chamada recursiva para a função principal.")
 
         self.tabSimbolos[node.value][5]=1
-        argsLista=[]
+        argsLista = []
         argsLista.append(self.listaArgs(node.child[0]))
 
         if (argsLista[0]==None):
-            argsLista=[]
+            argsLista = []
         elif (not(type(argsLista[0]) is str)):
             argsLista = argsLista[0]
 
@@ -376,12 +394,14 @@ class Analisador_Semantico:
             lenEsperados=(len(argsEsperados))
             lenRecebidos=(len(argsLista))
             print("Erro: Numero de argumentos esperados em '"+node.value+"' -> '"+str(lenEsperados)+"', quantidade de argumentos recebidos -> '"+str(lenRecebidos)+"'.")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         for i in range(len(argsLista)):
             if(argsLista[i]!=argsEsperados[i]):
                 print("Erro: Argumento -> '"+str(i)+"', tipo esperado -> '"+argsEsperados[i]+"', tipo recebido -> '"+ argsLista[i]+"'.")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
         self.tabSimbolos[node.value][3]=True
         return self.tabSimbolos[node.value][4]
@@ -408,21 +428,19 @@ class Analisador_Semantico:
     def indice(self, node):
         if(len(node.child) == 1):
             tipo = self.expressao(node.child[0])
-
             if(tipo != "inteiro"):
                 print("Erro: Index inválido, tipo recebido -> '"+tipo+"', tipo permitido -> 'inteiro'")
-                exit(1)
-
+                if (self.debug):
+                    exit(1)
             return("[]")
 
         else:
             var=self.indice(node.child[0])
             tipo=self.expressao(node.child[1])
-            print(var+tipo)
-
             if(tipo != "inteiro"):
                 print("Erro: Index inválido na variável'"+var+"', tipo recebido -> '"+tipo+"', tipo permitido -> 'inteiro'")
-                exit(1)
+                if (self.debug):
+                    exit(1)
 
             return ("[]"+var)
 
@@ -434,7 +452,8 @@ class Analisador_Semantico:
 
         if (tipoLoop != "logico"):
             print("Erro: Foi dado uma expressão do tipo -> '"+tipoLoop+"', tipo esperado -> 'logica', para 'repita' na função -> '"+self.escopo+"'")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         tipoCorpo = self.corpo(node.child[0])
         return tipoCorpo
@@ -444,7 +463,8 @@ class Analisador_Semantico:
 
         if (tipoIf != "logico"):
             print("Erro: Foi dado uma expressão do tipo -> '"+tipoIf+"', tipo esperado -> 'logica', para 'se' na função -> '"+self.escopo+"'")
-            exit(1)
+            if (self.debug):
+                exit(1)
 
         if (len(node.child) == 2):
             tipoCorpo = self.corpo(node.child[1])
@@ -489,17 +509,43 @@ class Analisador_Semantico:
     def verificaDeclarPrincipal(self,tabSimbolos):
         if("principal" not in tabSimbolos.keys()):
             print("Erro: Função 'principal' não declarada.")
-            exit(1)
+            if (self.debug):
+                exit(1)
+
+    def rchop(thestring, ending):
+      if thestring.endswith(ending):
+        return thestring[:-len(ending)]
+      return thestring
 
 if __name__ == '__main__':
-    As = Analisador_Semantico(sys.argv[1])
 
-    print()
-    print("_______________________________________________________________________")
-    print("O Analisador Semantico Finalizou com Sucesso.\n")
-    print("_______________________________________________________________________")
+    if(len(sys.argv) < 3):
+        print("\nPadrão Esperado: Analisador_Semantico.py ARQUIVO_TESTE --debug=ON/OFF")
+        print("\nEX: Analisador_Semantico.py semantica-testes/sema-001.tpp --debug=ON\n")
+        exit(1)
 
-    print()
+    else:
+        if((len(sys.argv) == 3) and (sys.argv[2] == "--debug=OFF")):
+            As = Analisador_Semantico(sys.argv[1],True)
 
-    for escopoNome, conteudo in As.tabSimbolos.items():
-        print(escopoNome,conteudo)
+            print()
+            print("_______________________________________________________________________")
+            print("O Analisador Semantico Finalizou com Sucesso.\n")
+            print("_______________________________________________________________________")
+            print()
+
+        elif((len(sys.argv) == 3 ) and (sys.argv[2] == "--debug=ON")):
+            As = Analisador_Semantico(sys.argv[1],False)
+
+            print()
+            print("_______________________________________________________________________")
+            print("O Analisador Semantico Finalizou com Sucesso.\n")
+            print("_______________________________________________________________________")
+            print()
+
+            for escopoNome, conteudo in As.tabSimbolos.items():
+                print(escopoNome,conteudo)
+        else:
+            print("\nPadrão Esperado: Analisador_Semantico.py ARQUIVO_TESTE --debug=ON/OFF")
+            print("\nEX: Analisador_Semantico.py semantica-testes/sema-001.tpp --debug=ON\n")
+            exit(1)
