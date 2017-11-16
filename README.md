@@ -3,7 +3,7 @@ Projeto de um compilador em Python para a linguagem T++ utilizando a ferramenta 
 Projeto Constituído de 4 partes:
  - Parte 1: Análise Léxica
  - Parte 2: Análise Sintática
- - Parte 3: ~~Análise Semântica~~
+ - Parte 3: Análise Semântica
  - Parte 4: ~~Geração de Código Intermediario~~
 
 ## Get Start
@@ -28,6 +28,10 @@ Clone ou faça o Download do projeto em .zip (via terminal/manual) para sua maqu
   Dentro de cada parte há duas pastas nomeadas:
   1. Implementação: Contém as Implementações Necessárias.
   2. Relatório: Contém um relatório completo sobre a parte Implementada.
+
+  - Exemplo de Execução:
+    ```
+    ```
 
 ## Observações
 Se você ja está perdido a ponto de ter chegado até aqui, vá em frente e se afunde de uma vez! :trollface:

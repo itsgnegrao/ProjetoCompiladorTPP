@@ -1,8 +1,8 @@
 # -----------------------------------------------------------------------------
 # UNIVERSIDADE TECNOLÓGICA FEDERAL DO PARANÁ - UTFPR-CM
-# Gabriel Negrão Silva - 1602012 - 12/09/2017
+# Gabriel Negrão Silva - 1602012 - 16/11/2017
 # Compiladores - Ciência Da Computação
-# lexerNegrao.py
+# Analisador_Sintatico.py
 # -----------------------------------------------------------------------------
 
 # Importação ply lexer
@@ -93,9 +93,12 @@ class Analisador_Sintatico:
             p[0] = Tree('indice', [p[2]])
 
     def p_tipo(self,p):
-        '''tipo : INTEIRO
-    			| FLUTUANTE'''
-        p[0] = Tree('tipo')
+        '''tipo : INTEIRO'''
+        p[0] = Tree('inteiro')
+
+    def p_tipo2 (self,p):
+        '''tipo : FLUTUANTE'''
+        p[0] = Tree('flutuante')
 
     def p_declaracao_funcao(self,p):
         ''' declaracao_funcao : tipo cabecalho
@@ -108,8 +111,6 @@ class Analisador_Sintatico:
     def p_cabecalho(self,p):
         ''' cabecalho : IDENTIFICADOR ABREPAR lista_parametros FECHAPAR corpo FIM
     				  | PRINCIPAL ABREPAR lista_parametros FECHAPAR corpo FIM'''
-        if p[1] == 'PRINCIPAL':
-            print("ola")
         p[0] = Tree('cabecalho', [p[3], p[5]], p[1])
 
     def p_lista_parametros(self,p):
@@ -122,9 +123,12 @@ class Analisador_Sintatico:
             p[0] = Tree('lista_parametros', [p[1]])
 
     def p_parametro(self,p):
-        ''' parametro : tipo DOISPONTOS IDENTIFICADOR
-    				  |  parametro ABRECOL FECHACOL '''
+        ''' parametro : tipo DOISPONTOS IDENTIFICADOR '''
         p[0] = Tree('parametro', [p[1]], p[3])
+
+    def p_parametro2(self,p):
+        ''' parametro : parametro ABRECOL FECHACOL '''
+        p[0] = Tree('parametro', [p[1]])
 
     def p_corpo(self,p):
         ''' corpo : corpo acao
@@ -163,9 +167,8 @@ class Analisador_Sintatico:
         p[0] = Tree('leia', [], p[3])
 
     def p_escreva(self,p):
-        ''' escreva : ESCREVA ABREPAR expressao FECHAPAR
-    				| ESCREVA ABREPAR chamada_funcao FECHAPAR'''
-        p[0] = Tree('escreva', [], p[3])
+        ''' escreva : ESCREVA ABREPAR expressao FECHAPAR'''
+        p[0] = Tree('escreva', [p[3]])
 
     def p_retorna(self,p):
         ''' retorna : RETORNA ABREPAR expressao FECHAPAR'''
@@ -245,7 +248,8 @@ class Analisador_Sintatico:
         p[0] = Tree('numero', [], p[1])
 
     def p_chamada_funcao(self,p):
-        '''chamada_funcao : IDENTIFICADOR ABREPAR lista_argumentos FECHAPAR'''
+        '''chamada_funcao : IDENTIFICADOR ABREPAR lista_argumentos FECHAPAR
+                          | PRINCIPAL ABREPAR lista_argumentos FECHAPAR'''
         p[0] = Tree('chamada_funcao', [p[3]], p[1])
 
     def p_lista_argumentos(self,p):
@@ -260,7 +264,7 @@ class Analisador_Sintatico:
     def p_error(self,p):
     	if p:
     		print("Erro sintático: '%s', linha %d" % (p.value, p.lineno))
-    		#exit(1)
+    		exit(1)
     	else:
     		yacc.restart()
     		print("Erro sintático: definições incompletas!")
