@@ -30,7 +30,17 @@ Clone ou faça o Download do projeto em .zip (via terminal/manual) para sua maqu
   2. Relatório: Contém um relatório completo sobre a parte Implementada.
 
   - Exemplo de Execução:
+    - Passo 1: Acesse a Parte Desejada P[1], P[2], P[3], P[4].
     ```
+    cd BCC__BCC36B__P[1]__GabrielNegrao_1602012/
+    ```
+    - Passo 2: Acesse a Implementação.
+    ```
+    cd Implementação
+    ```
+    - Passo 3: Execute a Parte Atual com python3 passando um arquivo teste como parametro.
+    ```
+    python3 Analisador_Semantico.py ARQUIVO_TESTE
     ```
 
 ## Observações
