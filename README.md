@@ -4,7 +4,7 @@ Projeto Constituído de 4 partes:
  - Parte 1: Análise Léxica
  - Parte 2: Análise Sintática
  - Parte 3: Análise Semântica
- - Parte 4: ~~Geração de Código Intermediario~~
+ - Parte 4: Geração de Código Intermediario with LLVMLITE
 
 ## Get Start
 Clone ou faça o Download do projeto em .zip (via terminal/manual) para sua maquina.

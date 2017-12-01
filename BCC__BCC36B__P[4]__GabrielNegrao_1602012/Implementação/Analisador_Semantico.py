@@ -346,19 +346,21 @@ class Analisador_Semantico:
         self.tabSimbolos[nome][2]=True
         self.tabSimbolos[nome][3]=True
 
-        #acha o indice
-        if (len(node.child[0].child) != 0):
-            if(node.child[0].child[0].type == "indice"):
-                tipoPosAcessada = self.indice(node.child[0].child[0]) #valida o tipo do indice
-                qtdeAcessada = (len(tipoPosAcessada))
-                tipoVar = tipoVar[:-qtdeAcessada]
+        try:
+            #acha o indice
+            if (len(node.child[0].child) != 0):
+                if(node.child[0].child[0].type == "indice"):
+                    tipoPosAcessada = self.indice(node.child[0].child[0]) #valida o tipo do indice
+                    qtdeAcessada = (len(tipoPosAcessada))
+                    tipoVar = tipoVar[:-qtdeAcessada]
 
-        if (len(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child) != 0):
-            if (node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0].type == "indice"):
-                tipoPosAcessada = self.indice(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0]) #valida o tipo do indice
-                qtdeAcessada = (len(tipoPosAcessada))
-                tipoExp = tipoExp[:-qtdeAcessada]
-
+            if (len(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child) != 0):
+                if (node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0].type == "indice"):
+                    tipoPosAcessada = self.indice(node.child[1].child[0].child[0].child[0].child[0].child[0].child[0].child[0]) #valida o tipo do indice
+                    qtdeAcessada = (len(tipoPosAcessada))
+                    tipoExp = tipoExp[:-qtdeAcessada]
+        except:
+            pass
         if (tipoVar != tipoExp):
             print ("Warning: Coerção de tipos, tipo esperado -> '"+tipoVar+"', tipo recebido -> '"+tipoExp+"'.")
 

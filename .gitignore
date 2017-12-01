@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+*.out
+
+BCC__BCC36B__P\[4\]__GabrielNegrao_1602012/Implementação/example\.py
+
+BCC__BCC36B__P\[4\]__GabrielNegrao_1602012/Implementação/example2\.py
